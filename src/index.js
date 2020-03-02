@@ -9,6 +9,8 @@ import Register from './components/Auth/Register'
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
+// @Notes
+// using the exact keyword is necessary to match routes
 const Root = () => (
     <Router>
         <Switch>
