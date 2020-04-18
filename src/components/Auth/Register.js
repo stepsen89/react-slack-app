@@ -80,6 +80,12 @@ export class Register extends Component {
     }
   };
 
+  handleInputError = (errors, inputName) => {
+    return errors.some((error) => error.message.includes(inputName))
+      ? "error"
+      : "";
+  };
+
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
@@ -121,11 +127,7 @@ export class Register extends Component {
                 onChange={this.handleChange}
                 type="email"
                 value={email}
-                className={
-                  errors.some((error) => error.message.includes("email"))
-                    ? "error"
-                    : ""
-                }
+                className={this.handleInputError(errors, "email")}
               />
               <Form.Input
                 fluid
@@ -135,7 +137,9 @@ export class Register extends Component {
                 iconPosition="left"
                 placeholder="Password"
                 onChange={this.handleChange}
+                className={this.handleInputError(errors, "password")}
                 type="password"
+                value={password}
               />
               <Form.Input
                 fluid
@@ -145,7 +149,9 @@ export class Register extends Component {
                 iconPosition="left"
                 placeholder="Confirm your password"
                 onChange={this.handleChange}
+                className={this.handleInputError(errors, "password")}
                 type="password"
+                value={passwordConfirmation}
               />
               <Button
                 disabled={loading}
