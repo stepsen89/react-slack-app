@@ -26,9 +26,26 @@ export class Login extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    if (this.isFormValid()) {
+    if (this.isFormValid(this.state)) {
       this.setState({ errors: [], loading: true });
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(this.state.email, this.state.password)
+        .then((signedInUser) => {
+          console.log(signedInUser);
+        })
+        .catch((err) => {
+          console.error(err);
+          this.setState({
+            errors: this.state.errors.concat(err),
+            loading: false,
+          });
+        });
     }
+  };
+
+  isFormValid = ({ email, password }) => {
+    return email && password;
   };
 
   handleInputError = (errors, inputName) => {
