@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import md5 from "md5";
 import {
   Grid,
   Form,
@@ -20,6 +21,7 @@ export class Register extends Component {
     passwordConfirmation: "",
     errors: [],
     loading: false,
+    usersRef: firebase.database().ref("users"),
   };
 
   isFormValid = () => {
@@ -68,7 +70,26 @@ export class Register extends Component {
         .createUserWithEmailAndPassword(this.state.email, this.state.password)
         .then((createdUser) => {
           console.log(createdUser);
-          this.setState({ loading: false });
+          createdUser.user
+            .updateProfile({
+              displayName: this.state.username,
+              photoURL: `http://gravatar.com/avatar/${md5(
+                createdUser.user.email
+              )}?d=identicon`,
+            })
+            .then(() => {
+              this.saveUser(createdUser).then(() => {
+                console.log("user saved");
+              });
+              // this.setState({ loading: false });
+            })
+            .catch((error) => {
+              console.error(error);
+              this.setState({
+                errors: this.state.errors.concat(error),
+                loading: false,
+              });
+            });
         })
         .catch((error) => {
           console.error(error);
@@ -78,6 +99,13 @@ export class Register extends Component {
           });
         });
     }
+  };
+
+  saveUser = (createdUser) => {
+    return this.state.usersRef.child(createdUser.user.uid).set({
+      name: createdUser.user.displayName,
+      avatar: createdUser.user.photoURL,
+    });
   };
 
   handleInputError = (errors, inputName) => {
@@ -103,7 +131,7 @@ export class Register extends Component {
         <Grid.Column style={{ maxWidth: 500 }}>
           <Form size="big" onSubmit={this.handleSubmit}>
             <Segment stacked padded="very">
-              <Header as="h2" color="blue" textAlign="center">
+              <Header as="h1" color="blue" textAlign="center">
                 Sign Up
               </Header>
               <Form.Input
