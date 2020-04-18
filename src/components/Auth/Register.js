@@ -63,7 +63,7 @@ export class Register extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    if (this.isFormValid()) {
+    if (this.isFormValid(this.state)) {
       this.setState({ errors: [], loading: true });
       firebase
         .auth()
