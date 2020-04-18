@@ -16,7 +16,7 @@ export class Register extends Component {
                             <Form.Input fluid size="big" name="username" icon="user" iconPosition="left" placeholder="Username" onChange={this.handleChange} type="text"/>
                             <Form.Input fluid size="big" name="email" icon="mail" iconPosition="left" placeholder="E-Mail Address" onChange={this.handleChange} type="email"/>
                             <Form.Input fluid size="big" name="password" icon="lock" iconPosition="left" placeholder="Password" onChange={this.handleChange} type="password"/>
-                            <Form.Input fluid size="big" name="passwordConfirmation" icon="lock" iconPosition="left" placeholder="Confirm your password" onChange={this.handleChange} type="password"/>
+                            <Form.Input fluid size="big" name="passwordConfirmation" icon="repeat" iconPosition="left" placeholder="Confirm your password" onChange={this.handleChange} type="password"/>
                             <Button color="blue" fluid size="large">Submit</Button> 
                         </Segment>
                     </Form>
