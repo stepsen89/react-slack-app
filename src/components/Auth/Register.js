@@ -19,6 +19,7 @@ export class Register extends Component {
     password: "",
     passwordConfirmation: "",
     errors: [],
+    loading: false,
   };
 
   isFormValid = () => {
@@ -26,33 +27,30 @@ export class Register extends Component {
     let error;
 
     if (this.isFormEmpty(this.state)) {
-      console.log("tests");
       error = { message: "fill in all fields" };
       this.setState({ errors: errors.concat(error) });
       return false;
     } else if (!this.isPasswordValid(this.state)) {
       error = { message: "password is not valid" };
       this.setState({ errors: errors.concat(error) });
-      console.log(this.state);
       return false;
     } else {
       return true;
     }
   };
 
+  displayErrors = (errors) =>
+    errors.map((error, i) => <p key={i}> {error.message} </p>);
+
   isPasswordValid = ({ password, passwordConfirmation }) => {
-    if (password.length < 6 || passwordConfirmation.length < 6) return false;
-    else if (password !== passwordConfirmation) return false;
-    else return true;
+    if (password.length < 6 || passwordConfirmation.length < 6) {
+      return false;
+    } else if (password !== passwordConfirmation) {
+      return false;
+    } else return true;
   };
 
   isFormEmpty = ({ email, username, password, passwordConfirmation }) => {
-    console.log(
-      !username.length ||
-        !email.length ||
-        !password.length ||
-        !passwordConfirmation.length
-    );
     return (
       !username.length ||
       !email.length ||
@@ -62,14 +60,23 @@ export class Register extends Component {
   };
 
   handleSubmit = (e) => {
+    e.preventDefault();
     if (this.isFormValid()) {
-      e.preventDefault();
-
+      this.setState({ errors: [], loading: true });
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.state.email, this.state.password)
-        .then((createdUser) => console.log(createdUser))
-        .catch((err) => console.error(err));
+        .then((createdUser) => {
+          console.log(createdUser);
+          this.setState({ loading: false });
+        })
+        .catch((error) => {
+          console.error(error);
+          this.setState({
+            errors: this.state.errors.concat(error),
+            loading: false,
+          });
+        });
     }
   };
 
@@ -77,7 +84,14 @@ export class Register extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
   render() {
-    const { username, email, password, passwordConfirmation } = this.state;
+    const {
+      username,
+      email,
+      password,
+      passwordConfirmation,
+      errors,
+      loading,
+    } = this.state;
     return (
       <Grid textAlign="center" verticalAlign="middle" className="app">
         <Grid.Column style={{ maxWidth: 500 }}>
@@ -95,6 +109,7 @@ export class Register extends Component {
                 placeholder="Username"
                 onChange={this.handleChange}
                 type="text"
+                value={username}
               />
               <Form.Input
                 fluid
@@ -105,6 +120,12 @@ export class Register extends Component {
                 placeholder="E-Mail Address"
                 onChange={this.handleChange}
                 type="email"
+                value={email}
+                className={
+                  errors.some((error) => error.message.includes("email"))
+                    ? "error"
+                    : ""
+                }
               />
               <Form.Input
                 fluid
@@ -126,9 +147,21 @@ export class Register extends Component {
                 onChange={this.handleChange}
                 type="password"
               />
-              <Button color="blue" fluid size="large">
+              <Button
+                disabled={loading}
+                className={loading ? "loading" : ""}
+                color="blue"
+                fluid
+                size="large"
+              >
                 Submit
               </Button>
+              {errors.length > 0 && (
+                <Message error>
+                  <h3> Error </h3>
+                  {this.displayErrors(this.state.errors)}
+                </Message>
+              )}
             </Segment>
           </Form>
           <Message>
