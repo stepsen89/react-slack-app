@@ -28,8 +28,10 @@ const store = createStore(rootReducer, composeWithDevTools());
 // using the exact keyword is necessary to match routes
 class Root extends Component {
   componentDidMount() {
+    console.log(this.props.isLoading);
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
+        this.props.setUser(user);
         this.props.history.push("/");
       }
     });
@@ -45,7 +47,11 @@ class Root extends Component {
   }
 }
 
-const RootWithAuth = withRouter(connect(null, { setUser })(Root));
+const mapStateToProps = (state) => ({
+  isLoading: state.user.isLoading,
+});
+
+const RootWithAuth = withRouter(connect(mapStateToProps, { setUser })(Root));
 
 ReactDOM.render(
   <Provider store={store}>
