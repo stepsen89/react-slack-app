@@ -17,6 +17,11 @@ import {
   withRouter,
 } from "react-router-dom";
 
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import { composeWithDevTools } from "redux-devtools-extension";
+
+const store = createStore(() => {}, composeWithDevTools());
 // @Notes
 // using the exact keyword is necessary to match routes
 class Root extends Component {
@@ -41,9 +46,11 @@ class Root extends Component {
 const RootWithAuth = withRouter(Root);
 
 ReactDOM.render(
-  <Router>
-    <RootWithAuth />
-  </Router>,
+  <Provider store={store}>
+    <Router>
+      <RootWithAuth />
+    </Router>
+  </Provider>,
   document.getElementById("root")
 );
 serviceWorker.unregister();
