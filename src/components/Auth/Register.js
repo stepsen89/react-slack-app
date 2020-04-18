@@ -18,15 +18,59 @@ export class Register extends Component {
     email: "",
     password: "",
     passwordConfirmation: "",
+    errors: [],
+  };
+
+  isFormValid = () => {
+    let errors = [];
+    let error;
+
+    if (this.isFormEmpty(this.state)) {
+      console.log("tests");
+      error = { message: "fill in all fields" };
+      this.setState({ errors: errors.concat(error) });
+      return false;
+    } else if (!this.isPasswordValid(this.state)) {
+      error = { message: "password is not valid" };
+      this.setState({ errors: errors.concat(error) });
+      console.log(this.state);
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  isPasswordValid = ({ password, passwordConfirmation }) => {
+    if (password.length < 6 || passwordConfirmation.length < 6) return false;
+    else if (password !== passwordConfirmation) return false;
+    else return true;
+  };
+
+  isFormEmpty = ({ email, username, password, passwordConfirmation }) => {
+    console.log(
+      !username.length ||
+        !email.length ||
+        !password.length ||
+        !passwordConfirmation.length
+    );
+    return (
+      !username.length ||
+      !email.length ||
+      !password.length ||
+      !passwordConfirmation.length
+    );
   };
 
   handleSubmit = (e) => {
-    e.preventDefault();
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .then((createdUser) => console.log(createdUser))
-      .catch((err) => console.error(err));
+    if (this.isFormValid()) {
+      e.preventDefault();
+
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(this.state.email, this.state.password)
+        .then((createdUser) => console.log(createdUser))
+        .catch((err) => console.error(err));
+    }
   };
 
   handleChange = (e) => {
