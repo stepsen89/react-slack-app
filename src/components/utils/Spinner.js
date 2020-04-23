@@ -5,7 +5,7 @@ export class Spinner extends Component {
   render() {
     return (
       <Dimmer active>
-        <Loader size="huger" content={"Loading...."} />;
+        <Loader size="huge" content={"Loading...."} />;
       </Dimmer>
     );
   }
