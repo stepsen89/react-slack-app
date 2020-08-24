@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import firebase from '../../firebase'
 import { Menu, Icon, Modal, Form, Input, Button } from 'semantic-ui-react';
 
 class Channels extends Component {
@@ -7,6 +8,7 @@ class Channels extends Component {
     openModal: false,
     channelName: null,
     channelDetails: null,
+    channelsRef: firebase.database().ref('channels')
   }
 
   closeModal = () => this.setState({ openModal: false })
@@ -14,6 +16,18 @@ class Channels extends Component {
 
   handleChange = event => this.setState({ [event.target.name]: event.target.value })
 
+  addChannel = () => {
+
+  }
+
+  handleSubmit = event => {
+    event.preventDefault();
+    if (this.isFormValid(this.state)) {
+      this.addChannel();
+    }
+  }
+
+  isFormValid = ({ channelName, channelDetails }) => channelName && channelDetails;
 
   render() {
     const { channels, openModal } = this.state;
@@ -30,7 +44,7 @@ class Channels extends Component {
         <Modal open={openModal} basic onClose={this.closeModal}>
           <Modal.Header> Add a channel </Modal.Header>
           <Modal.Content>
-            <Form>
+            <Form onSubmit={this.handleSubmit}>
               <Form.Field>
                 <Input fluid label="Name of Channel" name="channelName" onChange={this.handleChange} />
               </Form.Field>
@@ -41,7 +55,7 @@ class Channels extends Component {
           </Modal.Content>
 
           <Modal.Actions>
-            <Button color="green" inverted> <Icon name="checkmark" /> Add </Button>
+            <Button color="green" inverted onClick={this.handleSubmit}> <Icon name="checkmark" /> Add </Button>
             <Button color="red" inverted> <Icon name="remove" /> Cancel </Button>
           </Modal.Actions>
         </Modal>
