@@ -59,7 +59,7 @@ class Channels extends Component {
 
   displayChannels = channels => (
     channels.length > 0 && channels.map(channel => (
-      <Menu.Item key={channel.id} onClick={this.changeChannel} name={channel.name}>
+      <Menu.Item key={channel.id} onClick={() => this.changeChannel(channel)} name={channel.name}>
         # {channel.name}
       </Menu.Item>
 
