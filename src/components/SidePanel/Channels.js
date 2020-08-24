@@ -8,7 +8,8 @@ class Channels extends Component {
     openModal: false,
     channelName: null,
     channelDetails: null,
-    channelsRef: firebase.database().ref('channels')
+    channelsRef: firebase.database().ref('channels'),
+    user: this.props.currentUser,
   }
 
   closeModal = () => this.setState({ openModal: false })
@@ -17,7 +18,29 @@ class Channels extends Component {
   handleChange = event => this.setState({ [event.target.name]: event.target.value })
 
   addChannel = () => {
+    const { channelsRef, channelName, channelDetails, user } = this.state;
+    const key = channelsRef.push().key;
+    const newChannel = {
+      id: key,
+      name: channelName,
+      details: channelDetails,
+      createdBy: {
+        name: user.displayName,
+        avatar: user.photoURL,
+      }
+    }
 
+    channelsRef
+      .child(key)
+      .update(newChannel)
+      .then(() => {
+        this.setState({ channelName: '', channelDetails: '' });
+        this.closeModal();
+        console.log("channel added");
+      })
+      .catch(err => {
+        console.log(err);
+      })
   }
 
   handleSubmit = event => {
