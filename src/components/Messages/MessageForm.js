@@ -8,7 +8,8 @@ class MessageForm extends Component {
     loading: false,
     channel: this.props.currentChannel,
     currentUser: this.props.currentUser,
-    errors: []
+    errors: [],
+    modal: false
   }
 
   handleChange = event => {
@@ -55,8 +56,11 @@ class MessageForm extends Component {
     }
   }
 
+  openModal = () => this.setState({ modal: true })
+  closeModal = () => this.setState({ modal: false })
+
   render() {
-    const { errors, message, loading } = this.state;
+    const { errors, message, loading, modal } = this.state;
     return (
       <Segment className="message__form">
         <Input
@@ -72,7 +76,8 @@ class MessageForm extends Component {
         />
         <Button.Group icon widths="2">
           <Button color="orange" content="Add reply" labelPosition="left" icon="edit" onClick={this.sendMessage} disabled={loading} />
-          <Button color="teal" content="Upload media" labelPosition="right" icon="cloud upload" />
+          <Button color="teal" content="Upload media" labelPosition="right" icon="cloud upload" onClick={this.openModal} />
+          <FileModal modal={modal} closeModal={this.closeModal} />
         </Button.Group>
       </Segment>
     );
