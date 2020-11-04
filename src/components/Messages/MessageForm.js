@@ -60,6 +60,11 @@ class MessageForm extends Component {
   openModal = () => this.setState({ modal: true })
   closeModal = () => this.setState({ modal: false })
 
+  uploadFile = (file, metadata) => {
+    console.log(file);
+    console.log(metadata)
+  }
+
   render() {
     const { errors, message, loading, modal } = this.state;
     return (
@@ -78,7 +83,7 @@ class MessageForm extends Component {
         <Button.Group icon widths="2">
           <Button color="orange" content="Add reply" labelPosition="left" icon="edit" onClick={this.sendMessage} disabled={loading} />
           <Button color="teal" content="Upload media" labelPosition="right" icon="cloud upload" onClick={this.openModal} />
-          <FileModal modal={modal} closeModal={this.closeModal} />
+          <FileModal modal={modal} closeModal={this.closeModal} uploadFile={this.uploadFile} />
         </Button.Group>
       </Segment>
     );
