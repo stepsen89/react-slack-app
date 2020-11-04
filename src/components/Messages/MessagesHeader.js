@@ -17,7 +17,7 @@ class MessagesHeader extends Component {
         </Header>
         {/* Channel search input */}
         <Header floated="right">
-          <Input size="mini" icon="search" name="searchTerm" placeHolder="Search messages" />
+          <Input size="mini" icon="search" name="searchTerm" placeholder="Search messages" />
         </Header>
       </Segment>
     )
