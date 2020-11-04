@@ -12,6 +12,8 @@ class Channels extends Component {
     channelDetails: null,
     channelsRef: firebase.database().ref('channels'),
     user: this.props.currentUser,
+    firstLoad: true,
+    activeChannel: ''
   }
 
   closeModal = () => this.setState({ openModal: false })
@@ -27,8 +29,17 @@ class Channels extends Component {
     let loadedChannels = [];
     this.state.channelsRef.on('child_added', snap => {
       loadedChannels.push(snap.val());
-      this.setState({ channels: loadedChannels })
+      this.setState({ channels: loadedChannels }, () => this.setFirstChannel())
     })
+  }
+
+  setFirstChannel = () => {
+    const firstChannel = this.state.channels[0];
+    if (this.state.firstLoad && this.state.channels.length > 0){
+      this.props.setCurrentChannel(firstChannel);
+      this.setActiveChannel(firstChannel);
+    }
+    this.setState({firstLoad: false})
   }
 
   addChannel = () => {
@@ -59,7 +70,7 @@ class Channels extends Component {
 
   displayChannels = channels => (
     channels.length > 0 && channels.map(channel => (
-      <Menu.Item key={channel.id} onClick={() => this.changeChannel(channel)} name={channel.name}>
+      <Menu.Item key={channel.id} onClick={() => this.changeChannel(channel)} name={channel.name} active={channel.id === this.state.activeChannel}>
         # {channel.name}
       </Menu.Item>
 
@@ -67,10 +78,14 @@ class Channels extends Component {
   )
 
   changeChannel = channel => {
+    this.setActiveChannel(channel);
     this.props.setCurrentChannel(channel);
   }
 
 
+  setActiveChannel = channel => {
+    this.setState ({ activeChannel: channel.id })
+  }
   handleSubmit = event => {
     event.preventDefault();
     if (this.isFormValid(this.state)) {
