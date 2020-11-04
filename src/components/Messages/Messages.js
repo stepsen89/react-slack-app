@@ -12,6 +12,27 @@ class Messages extends Component {
     currentUser: this.props.currentUser
   }
 
+  componentDidMount() {
+    const { channel, currentUser } = this.state;
+    if (channel && currentUser) {
+      this.addListeners(channel.id);
+      console.log("channel and user")
+    }
+  }
+
+  addListeners = channelId => {
+    this.addMessageListener(channelId);
+
+  }
+
+  addMessageListener = channelId => {
+    let loadedMessages = [];
+    this.state.messagesRef.child(channelId).on('child_added', snap => {
+      loadedMessages.push(snap.val());
+      console.log(loadedMessages);
+    })
+  }
+
 
   render() {
     const { messagesRef, channel, currentUser } = this.state;
