@@ -3,7 +3,7 @@ import { Header, Segment, Input, Icon } from 'semantic-ui-react';
 
 class MessagesHeader extends Component {
   render() {
-    const { channelName } = this.props;
+    const { channelName, numUniqueUsers } = this.props;
     return (
       <Segment clearing>
         {/* Channel title */}
@@ -13,7 +13,7 @@ class MessagesHeader extends Component {
             <Icon name={"star outline"} color="black" />
           </span>
           <Header.Subheader>
-            2 Users
+            {numUniqueUsers}
           </Header.Subheader>
         </Header>
         {/* Channel search input */}
