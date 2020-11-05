@@ -19,10 +19,9 @@ export class FileModal extends Component {
   sendFile = () => {
     const { uploadFile, closeModal } = this.props;
     const { file } = this.state;
-    console.log(file);
+
     if (file !== null) {
       if (this.isAuthorised(file.name)) {
-        console.log("here");
         const metadata = { contentType: mime.lookup(file.name) };
         uploadFile(file, metadata);
         closeModal();
