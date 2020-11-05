@@ -25,7 +25,7 @@ class Channels extends Component {
     this.addListeners();
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.removeListeners();
   }
 
@@ -43,11 +43,11 @@ class Channels extends Component {
 
   setFirstChannel = () => {
     const firstChannel = this.state.channels[0];
-    if (this.state.firstLoad && this.state.channels.length > 0){
+    if (this.state.firstLoad && this.state.channels.length > 0) {
       this.props.setCurrentChannel(firstChannel);
       this.setActiveChannel(firstChannel);
     }
-    this.setState({firstLoad: false})
+    this.setState({ firstLoad: false })
   }
 
   addChannel = () => {
@@ -92,7 +92,7 @@ class Channels extends Component {
 
 
   setActiveChannel = channel => {
-    this.setState ({ activeChannel: channel.id })
+    this.setState({ activeChannel: channel.id })
   }
   handleSubmit = event => {
     event.preventDefault();
@@ -107,7 +107,7 @@ class Channels extends Component {
     const { channels, openModal } = this.state;
     return (
       <React.Fragment>
-        <Menu.Menu style={{ paddingBottom: '2em' }}>
+        <Menu.Menu className="menu">
           <Menu.Item>
             <span>
               <Icon name="exchange" /> CHANNELS

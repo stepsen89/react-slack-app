@@ -42,3 +42,8 @@ body,
 .ui.comments {
     max-width: 100vw !important;
 }
+
+/* SidePanel */
+.menu {
+    padding-bottom: 2em;
+}

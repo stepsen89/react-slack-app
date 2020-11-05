@@ -84,7 +84,7 @@ class Messages extends Component {
     const searchResults = channelMessages.reduce((acc, message) => {
       // first check if given message has this content property
       // could have an image instead of content so safeChecking it first
-      if (message.content && message.content.match(regex) || message.user.name.match(regex)) {
+      if ((message.content && message.content.match(regex)) || message.user.name.match(regex)) {
         acc.push(message);
       }
       return acc;
