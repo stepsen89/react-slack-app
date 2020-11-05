@@ -87,6 +87,7 @@ class MessageForm extends Component {
           'state_changed',
           snap => {
             const percentUploaded = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
+            this.props.isProgressBarVisible(percentUploaded);
             this.setState({ percentUploaded })
           },
           err => {
@@ -147,7 +148,7 @@ class MessageForm extends Component {
         />
         <Button.Group icon widths="2">
           <Button color="orange" content="Add reply" labelPosition="left" icon="edit" onClick={this.sendMessage} disabled={loading} />
-          <Button color="teal" content="Upload media" labelPosition="right" icon="cloud upload" onClick={this.openModal} />
+          <Button color="teal" content="Upload media" labelPosition="right" icon="cloud upload" onClick={this.openModal} disabled={uploadState === "uploading"} />
         </Button.Group>
         <FileModal
           modal={modal}

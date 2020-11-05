@@ -11,6 +11,11 @@ body,
     overflow-y: scroll;
 }
 
+.messages__progress {
+    height: 74vh;
+    overflow-y: scroll;
+}
+
 .message__form {
     position: fixed !important;
     bottom: 1em;
@@ -23,6 +28,7 @@ body,
 .message__self {
     border-left: 2px solid orange;
     padding-left: 8px;
+    width: 100vw;
 }
 
 .message__image {
@@ -34,5 +40,5 @@ body,
 }
 
 .ui.comments {
-    max-width: 100vw;
+    max-width: 100vw !important;
 }

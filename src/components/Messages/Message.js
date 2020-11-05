@@ -11,7 +11,7 @@ const timeFromNow = timeStamp => {
 };
 
 const Message = ({ message, user }) => (
-  < Comment >
+  < Comment>
     <Comment.Avatar src={message.user.avatar} />
     <Comment.Content className={isOwnMessage(message, user)}>
       <Comment.Author as="a">{message.user.name}</Comment.Author>
