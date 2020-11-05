@@ -14,7 +14,10 @@ class Messages extends Component {
     channel: this.props.currentChannel,
     currentUser: this.props.currentUser,
     progressBar: false,
-    numUniqueUsers: ''
+    numUniqueUsers: '',
+    searchTerm: '',
+    searchLoading: false,
+    searchResults: []
   }
 
   componentDidMount() {
@@ -66,15 +69,38 @@ class Messages extends Component {
     const numUniqueUsers = `${uniqueUsers.length} user${multiple ? 's' : ''}`;
     this.setState({ numUniqueUsers })
   }
+
+  handleSearchChange = event => {
+    this.setState({
+      searchTerm: event.target.value,
+      searchLoading: true
+    }, () => this.handleSearchMessages());
+  }
+
+  handleSearchMessages = () => {
+    // spreading to make sure not to mutate the state messages
+    const channelMessages = [...this.state.messages];
+    const regex = new RegExp(this.state.searchTerm, 'gi');
+    const searchResults = channelMessages.reduce((acc, message) => {
+      // first check if given message has this content property
+      // could have an image instead of content so safeChecking it first
+      if (message.content && message.content.match(regex)) {
+        acc.push(message);
+      }
+      return acc;
+    }, []);
+    this.setState({ searchResults })
+  }
+
   render() {
-    const { messagesRef, channel, messages, currentUser, progressBar, numUniqueUsers } = this.state;
+    const { messagesRef, channel, messages, currentUser, progressBar, numUniqueUsers, searchResults, searchTerm } = this.state;
 
     return (
       <Fragment>
-        <MessagesHeader channelName={this.displayChannelName(channel)} numUniqueUsers={numUniqueUsers} />
+        <MessagesHeader channelName={this.displayChannelName(channel)} numUniqueUsers={numUniqueUsers} handleSearchChange={this.handleSearchChange} />
         <Segment>
           <Comment.Group className={progressBar ? "messages__progress" : "messages"}>
-            {this.displayMessages(messages)}
+            {searchTerm ? this.displayMessages(searchResults) : this.displayMessages(messages)}
           </Comment.Group>
         </Segment>
         <MessageForm messagesRef={messagesRef} currentChannel={channel} currentUser={currentUser} isProgressBarVisible={this.isProgressBarVisible} />
