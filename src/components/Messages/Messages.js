@@ -84,20 +84,21 @@ class Messages extends Component {
     const searchResults = channelMessages.reduce((acc, message) => {
       // first check if given message has this content property
       // could have an image instead of content so safeChecking it first
-      if (message.content && message.content.match(regex)) {
+      if (message.content && message.content.match(regex) || message.user.name.match(regex)) {
         acc.push(message);
       }
       return acc;
     }, []);
-    this.setState({ searchResults })
+    this.setState({ searchResults });
+    setTimeout(() => this.setState({ searchLoading: false }), 1000);
   }
 
   render() {
-    const { messagesRef, channel, messages, currentUser, progressBar, numUniqueUsers, searchResults, searchTerm } = this.state;
+    const { messagesRef, channel, messages, currentUser, progressBar, numUniqueUsers, searchResults, searchTerm, searchLoading } = this.state;
 
     return (
       <Fragment>
-        <MessagesHeader channelName={this.displayChannelName(channel)} numUniqueUsers={numUniqueUsers} handleSearchChange={this.handleSearchChange} />
+        <MessagesHeader channelName={this.displayChannelName(channel)} numUniqueUsers={numUniqueUsers} handleSearchChange={this.handleSearchChange} searchLoading={searchLoading} />
         <Segment>
           <Comment.Group className={progressBar ? "messages__progress" : "messages"}>
             {searchTerm ? this.displayMessages(searchResults) : this.displayMessages(messages)}
