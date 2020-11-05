@@ -80,11 +80,14 @@ class Messages extends Component {
   handleSearchMessages = () => {
     // spreading to make sure not to mutate the state messages
     const channelMessages = [...this.state.messages];
-    const regex = new RegExp(this.state.searchTerm, 'gi');
+    const userSearch = this.state.searchTerm.trim()[0] === '@';
+    const searchTerm = userSearch ? this.state.searchTerm.trim().substring(1) : this.state.searchTerm;
+    const regex = new RegExp(searchTerm, 'gi');
     const searchResults = channelMessages.reduce((acc, message) => {
-      // first check if given message has this content property
-      // could have an image instead of content so safeChecking it first
-      if ((message.content && message.content.match(regex)) || message.user.name.match(regex)) {
+      if (userSearch && message.user.name.match(regex)) {
+        acc.push(message)
+      }
+      if (!userSearch && (message.content && message.content.match(regex))) {
         acc.push(message);
       }
       return acc;
