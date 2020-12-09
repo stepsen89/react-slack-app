@@ -106,7 +106,6 @@ class Channels extends Component {
       .then(() => {
         this.setState({ channelName: '', channelDetails: '' });
         this.closeModal();
-        console.log("channel added");
       })
       .catch(err => {
         console.log(err);

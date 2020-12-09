@@ -20,7 +20,6 @@ const Message = ({ message, user }) => (
         <Image src={message.image} className="message__image" /> :
         <Comment.Text>{message.content}</Comment.Text>
       }
-      {console.log(message)}
     </Comment.Content>
 
   </Comment >
